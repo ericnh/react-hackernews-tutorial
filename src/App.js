@@ -24,6 +24,7 @@ class App extends Component {
     }
 
     this.onDismiss = this.onDismiss.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
@@ -35,6 +36,12 @@ class App extends Component {
     this.setState({ 
       result: { ...this.state.result, hits: newList }
     });
+  }
+
+  onSearchSubmit(event) {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+    event.preventDefault();
   }
 
   onSearchChange(event) {
@@ -60,37 +67,43 @@ class App extends Component {
   render() {
     // ES6 destructuring variable assignment
     const {searchTerm, result} = this.state
-    if (!result) { return null; }
     return (
       <div className="App page">
         <div className="interactions">
           <Search 
             value={ searchTerm }
             onChange={ this.onSearchChange }
-          />
+            onSubmit={ this.onSearchSubmit }
+          >
+            Search
+          </Search>
         </div>
-        <Table
-          list={ result.hits }
-          pattern= { searchTerm }
-          onDismiss={ this.onDismiss }
-        />
+        { result &&
+          <Table
+            list={ result.hits }
+            onDismiss={ this.onDismiss }
+          />
+        }
       </div>
     );
   }
 }
 
-const Search = ({ value, onChange, children }) =>
-  <form>
+const Search = ({ value, onChange, onSubmit, children }) =>
+  <form onSubmit={ onSubmit }>
     <input
       type="text"
       value={ value }
       onChange={ onChange }
     />
+    <button type="submit">
+      { children }
+    </button>
   </form>
 
-const Table = ({ list, pattern, onDismiss }) =>
+const Table = ({ list, onDismiss }) =>
   <div className="table">
-    { list.filter(isSearched(pattern)).map( item =>
+    { list.map( item =>
         <div key={ item.objectID } className="table-row">
           <span style={{ width: '40%' }}>
             <a href={ item.url }>{ item.title }</a>
