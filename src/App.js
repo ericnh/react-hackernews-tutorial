@@ -30,8 +30,11 @@ class App extends Component {
   }
 
   onDismiss(objectID) {
-    const newList = this.state.result.filter( item => item.objectID !== objectID );
-    this.setState({ result: newList });
+    const isNotID = item => item.objectID !== objectID;
+    const newList = this.state.result.hits.filter(isNotID);
+    this.setState({ 
+      result: { ...this.state.result, hits: newList }
+    });
   }
 
   onSearchChange(event) {
