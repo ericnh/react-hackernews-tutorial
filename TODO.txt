@@ -1,4 +1,7 @@
 # TODO #
-- split up app.js into different files
-- open links into new tabs
+- add tests
+
+# DONE #
 - add title text to cells
+- open links into new tabs
+- split up app.js into different files
