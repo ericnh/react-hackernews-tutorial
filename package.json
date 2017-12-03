@@ -4,6 +4,7 @@
   "description": "Learning app made by following The Road to Learn React tutorial by Robin Wieruch",
   "private": true,
   "dependencies": {
+    "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-scripts": "1.0.10"
