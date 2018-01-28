@@ -13,7 +13,7 @@ const Search = ({ value, onChange, onSubmit, children }) =>
     </button>
   </form>
 
-Search.PropTypes = {
+Search.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
