@@ -26,6 +26,7 @@ class App extends Component {
       searchTerm: DEFAULT_QUERY,
       results: null,
       searchKey: '',
+      eror: null,
     }
 
     this.onDismiss = this.onDismiss.bind(this);
@@ -78,6 +79,7 @@ class App extends Component {
       ...hits
     ];
 
+    // ES6 computed property names [computedPropertyName]: value
     this.setState({ 
       results: {
         ...results,
@@ -91,7 +93,7 @@ class App extends Component {
     fetch(url)
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
-      .catch(e => e);
+      .catch(e => this.setState({ error: e }));
   }
 
   componentDidMount() {
@@ -101,14 +103,20 @@ class App extends Component {
   }
 
   needsToSearchTopStories(searchTerm) {
-    return !this.state.results[searchTerm];
+    const { results } = this.state;
+    return !results || !results[searchTerm];
   }
 
   render() {
     // ES6 destructuring variable assignment
-    const { searchTerm, results, searchKey } = this.state
+    const {
+      searchTerm,
+      results,
+      searchKey,
+      error } = this.state
     const page = ( results && results[searchKey] && results[searchKey].page ) || 0
     const list = ( results && results[searchKey] && results[searchKey].hits ) || []
+
     return (
       <div className="App page">
         <div className="interactions">
@@ -120,10 +128,12 @@ class App extends Component {
             Fetch
           </Search>
         </div>
-        <Table
-          list={ list }
-          onDismiss={ this.onDismiss }
-        />
+        { error ?
+            <p>Something went rong.</p> :
+            <Table
+              list={ list }
+              onDismiss={ this.onDismiss } />
+        }
         <div className="interactions">
           <Button onClick={ () => this.fetchSearchTopStories(searchKey, page + 1) }>
             More
